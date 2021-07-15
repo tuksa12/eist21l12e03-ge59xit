@@ -5,9 +5,17 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.time.*;
 import java.util.*;
 
+import org.easymock.Mock;
 import org.junit.jupiter.api.*;
 
 class RiderTest {
+
+    private Rider testRider;
+    private PEV testPEV;
+    private LocalDateTime testLocalDateTime;
+    private DriversLicense testDriversLicense;
+
+
 
 	/*
      * @formatter:off
@@ -31,4 +39,32 @@ class RiderTest {
      */
 
 	// TODO implement the 2 tests here
+
+    @Test
+    public void rent() {
+        testPEV = new EBike(100, "Plate");
+        testDriversLicense = new DriversLicense(LocalDateTime.MAX,"Plate");
+        testLocalDateTime = LocalDateTime.now();
+        testRider = new Rider("Example", 20, true, testDriversLicense);
+        Rental testRental = new Rental(testLocalDateTime, LocalDateTime.MAX, testPEV, testRider);
+
+        Assertions.assertNotNull(testRental);
+
+        testRental = testPEV.rent(testLocalDateTime, LocalDateTime.MAX,testRider);
+        Assertions.assertTrue(testPEV.getRentals().contains(testRental));
+    }
+
+    @Test
+    public void list() {
+        testPEV = new EBike(100, "Plate");
+        testDriversLicense = new DriversLicense(LocalDateTime.MAX,"Plate");
+        testLocalDateTime = LocalDateTime.now();
+        testRider = new Rider("Example", 20, true, testDriversLicense);
+        Rental testRental = new Rental(testLocalDateTime, LocalDateTime.MAX, testPEV, testRider);
+
+        testPEV.getRentals().add(testRental);
+        Assertions.assertFalse(testPEV.getRentals().contains(testRental));
+    }
+
+
 }
